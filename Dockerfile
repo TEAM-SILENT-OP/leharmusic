@@ -1,12 +1,19 @@
-FROM nikolaik/python-nodejs:python3.10-nodejs19
+FROM python:3.11-slim-bookworm
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends ffmpeg \
+ENV PYTHONUNBUFFERED=1
+ENV DEBIAN_FRONTEND=noninteractive
+
+WORKDIR /app
+
+RUN apt-get update -o Acquire::Retries=3 \
+    && apt-get install -y --no-install-recommends ffmpeg git \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 COPY . /app/
-WORKDIR /app/
-RUN pip3 install --no-cache-dir -U -r requirements.txt
+
+RUN python -m pip install --upgrade pip setuptools wheel
+
+RUN pip install --no-cache-dir -r requirements.txt
 
 CMD bash start
