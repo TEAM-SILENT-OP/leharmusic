@@ -26,3 +26,4 @@ yt-dlp
 youtube-search
 youtube-search-python
 six>=1.16.0
+py-yt
